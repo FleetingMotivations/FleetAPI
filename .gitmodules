@@ -1,0 +1,3 @@
+[submodule "lib/FleetEntityFramework"]
+	path = lib/FleetEntityFramework
+	url = https://github.com/FleetingMotivations/FleetEntityFramework
