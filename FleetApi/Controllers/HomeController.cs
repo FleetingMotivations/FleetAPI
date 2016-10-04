@@ -37,7 +37,7 @@ namespace FleetApi.Controllers
             }
         }
 
-        [Route("buildings")]
+        [Route("buildings/{campusId}")]
         public IHttpActionResult GetBuildings(int campusId)
         {
             using (var db = new FleetContext())
@@ -55,7 +55,7 @@ namespace FleetApi.Controllers
             }
         }
             
-        [Route("rooms")]
+        [Route("rooms/{buildingId}")]
         public IHttpActionResult GetRooms(int buildingId)
         {
             using (var db = new FleetContext())
@@ -70,6 +70,51 @@ namespace FleetApi.Controllers
                     .ToList();
 
                 return Ok(rooms);
+            }
+        }
+
+        [Route("workstations/{roomId}")]
+        public IHttpActionResult GetWorkstations(int roomId)
+        {
+            using (var db = new FleetContext())
+            {
+                var availableWorkstationModels = db.Workstations
+                    .Where(w => w.RoomID == roomId)
+                    .Where(w => (!w.Workgroups.Any()) || w.Workgroups
+                        .All(wgr => 
+                            wgr.Workgroup.Started > DateTime.Now    // Started in the fuxture
+                            || wgr.Workgroup.Expires < DateTime.Now // Ended in the past
+                            || wgr.TimeRemoved.HasValue             // Or was removed from a workgroup
+                        )
+                    ).Select(w => new
+                    {
+                        Id = w.WorkstationId,
+                        Name = w.FriendlyName,
+                        LastSeen = w.LastSeen,
+                        TopXRoomOffset = w.TopXRoomOffset,
+                        TopYRoomOffset = w.TopYRoomOffset,
+                        Available = true
+                    });
+                var unavailableWorkstationModels = db.Workstations
+                    .Where(w => w.RoomID == roomId)
+                    .Where(w => w.Workgroups
+                        .Any(wgr => 
+                            wgr.Workgroup.Started < DateTime.Now    // Started in the fuxture
+                            && wgr.Workgroup.Expires > DateTime.Now // Ended in the past
+                            && !wgr.TimeRemoved.HasValue             // Or was removed from a workgroup
+                        )
+                    ).Select(w => new
+                    {
+                        Id = w.WorkstationId,
+                        Name = w.FriendlyName,
+                        LastSeen = w.LastSeen,
+                        TopXRoomOffset = w.TopXRoomOffset,
+                        TopYRoomOffset = w.TopYRoomOffset,
+                        Available = false
+                    });
+
+                var q = availableWorkstationModels.Union(unavailableWorkstationModels).ToList();
+                return Ok(q);
             }
         }
     }
