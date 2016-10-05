@@ -20,7 +20,7 @@ using FleetApi.Results;
 namespace FleetApi.Controllers
 {
     [Authorize]
-    [RoutePrefix("api/Account")]
+    [RoutePrefix("api/unsafe/Account")]
     public class AccountController : ApiController
     {
         private const string LocalLoginProvider = "Local";

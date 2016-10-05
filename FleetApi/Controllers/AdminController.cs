@@ -80,5 +80,37 @@ namespace FleetApi.Controllers
                 return Ok(workstation.WorkstationId);
             }
         }
+
+        [Route("userRoles")]
+        public IHttpActionResult GetRoles()
+        {
+            return Ok(new
+            {
+                Facilitator = 1,
+                Regular = 2
+            });
+        }
+
+       
+
+        [Route("unsafe/user")]
+        [HttpPost]
+        public IHttpActionResult AddUser(string username, string firstName, string lastName, UserRole role)
+        {
+            using (var db = new FleetContext())
+            {
+                db.Users.Add(new User
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Identifer = username,
+                    Role = role
+                });
+
+                db.SaveChanges();
+
+                return Ok();
+            }
+        }
     }
 }
