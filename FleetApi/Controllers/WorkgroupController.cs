@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 using FleetApi.Models;
 using FleetEntityFramework.DAL;
 using FleetEntityFramework.Models;
@@ -17,6 +18,13 @@ namespace FleetApi.Controllers
     {
         private readonly static object _lock = new object();
 
+        /// <summary>
+        /// Enable of disable sharing capabilities for a particular workstation in a workgroup
+        /// </summary>
+        /// <param name="workgroupId">THe target workgroup</param>
+        /// <param name="workstationId">THe target workstation</param>
+        /// <param name="enable">Toggle value</param>
+        /// <returns></returns>
         [HttpPut]
         [Route("workgroups/{workgroupId}/workstations/{workstationId}/sharing")]
         public IHttpActionResult ToggleSharingAbility(int workgroupId, int workstationId, [FromBody]bool enable)
@@ -25,6 +33,8 @@ namespace FleetApi.Controllers
             {
                 // Ensure that the workstation is in the workgroup, and hasn't been removed
                 var workstationGroupMembership = db.WorkgroupMembers
+                    .Include(w => w.Workstation)
+                    .Include(w => w.Workgroup)
                     .Where(w => w.WorkstationId == workstationId)
                     .Where(w => w.WorkgroupId == workgroupId)
                     .Where(w => !w.TimeRemoved.HasValue)
@@ -44,6 +54,12 @@ namespace FleetApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Enables or disables sharing for the whole workgroup
+        /// </summary>
+        /// <param name="workgroupId">THe target workgroup</param>
+        /// <param name="enable">Toggle value</param>
+        /// <returns></returns>
         [HttpPut]
         [Route("workgroups/{workgroupId}/sharing")]
         public IHttpActionResult ToggleSharingAbility(int workgroupId, [FromBody]bool enable)
@@ -52,6 +68,7 @@ namespace FleetApi.Controllers
             {
                 // Ensure that the workstation is in the workgroup, and hasn't been removed
                 var workstationGroupMemberships = db.WorkgroupMembers
+                    .Include(w => w.Workgroup)
                     .Where(w => w.WorkgroupId == workgroupId)
                     .Where(Workgroup.IsInProgress())
                     .Where(w => !w.TimeRemoved.HasValue);
@@ -63,6 +80,15 @@ namespace FleetApi.Controllers
             }
         }
 
+        /// <summary>
+        /// 
+        /// Adds a workstation to the workgroup
+        /// Assumes the workgroup is in progress, and the workstation is available
+        /// 
+        /// </summary>
+        /// <param name="workgroupId">THe target workgroup</param>
+        /// <param name="workstationId">THe target workstation</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("workgroups/{workgroupId}/workstations/{workstationId}")]
         public IHttpActionResult AddWorkstation(int workgroupId, int workstationId)
@@ -117,6 +143,16 @@ namespace FleetApi.Controllers
             return NotFound();
         }
 
+        /// <summary>
+        /// Will remove a given workstation from the workgroup
+        /// 
+        /// Assumes workgroup is still in progress, and that workstation is
+        /// currently in the workgroup
+        ///  
+        /// </summary>
+        /// <param name="workgroupId">THe target workgroup</param>
+        /// <param name="workstationId">THe target workstation</param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("workgroups/{workgroupId}/workstations/{workstationId}")]
         public IHttpActionResult DeleteWorkstation(int workgroupId, int workstationId)
@@ -124,6 +160,7 @@ namespace FleetApi.Controllers
             using (var db = new FleetContext())
             {
                 var workgroupMember = db.WorkgroupMembers
+                    .Include(w => w.Workgroup)
                     .Where(w => w.WorkgroupId == workgroupId)
                     .Where(w => w.WorkstationId == workstationId)
                     .Where(Workgroup.IsInProgress())
@@ -147,8 +184,14 @@ namespace FleetApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Returns all of the workstations that are currently a member of the workgroup
+        /// </summary>
+        /// <param name="workgroupId">The target workgroup</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("workgroups/{workgroupId}/workstations")]
+        [ResponseType(typeof(WorkgroupMemberModel))]
         public IHttpActionResult GetWorkstations(int workgroupId)
         {
             using (var db = new FleetContext())
@@ -158,24 +201,33 @@ namespace FleetApi.Controllers
                     .Single(w => w.WorkgroupId == workgroupId)
                     .Workstations
                     .Where(wm => !wm.TimeRemoved.HasValue)
-                    .Select(w => new
+                    .Select(w => new WorkgroupMemberModel
                     {
                         Id = w.WorkstationId,
                         SharingEnabled = w.SharingEnabled,
                         LastSeen = w.Workstation.LastSeen,
-                        FriendlyName = w.Workstation.FriendlyName,
+                        Name = w.Workstation.FriendlyName,
                         Colour = w.Workstation.Colour,
-                        TopXOffset = w.Workstation.TopXRoomOffset,
-                        TopYOffset = w.Workstation.TopYRoomOffset
+                        TopXRoomOffset = w.Workstation.TopXRoomOffset,
+                        TopYRoomOffset = w.Workstation.TopYRoomOffset
                     })
                     .ToList();
                 return Ok(workstations);
             }
         }
 
-            
+        /// <summary>
+        /// Creates a new workgroup
+        /// 
+        /// Assumes all of the workstations are currently available, and that the user
+        /// making the workgroup, doesn't have any currently running or scheduled workgroups
+        /// 
+        /// </summary>
+        /// <param name="workgroup"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("workgroups")]
+        [ResponseType(typeof(EntityModel))]
         public IHttpActionResult CreateWorkgroup(WorkgroupBindingModel workgroup)
         {
             using (var db = new FleetContext())
@@ -214,6 +266,7 @@ namespace FleetApi.Controllers
                 {
                     // Ensure all selected workstations are not currently in a group
                     var badWorkstations = db.WorkgroupMembers
+                        .Include(w => w.Workgroup)
                         .Where(wm => workgroup.Workstations.Contains(wm.WorkstationId))
                         .Where(wm => !wm.TimeRemoved.HasValue)
                         .Where(Workgroup.IsInProgress())
@@ -267,9 +320,9 @@ namespace FleetApi.Controllers
 
                     db.SaveChanges();
                 }
-                return Ok(new
+                return Ok(new EntityModel
                 {
-                    WorkgroupdId = workgroupModel.WorkgroupId
+                    Id = workgroupModel.WorkgroupId
                 });
             }
         }

@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
+using FleetApi.Models;
 using FleetEntityFramework.DAL;
 
 namespace FleetApi.Controllers
@@ -12,13 +14,28 @@ namespace FleetApi.Controllers
     [RoutePrefix("api")]
     public class UserController : BaseController
     {
+
+        /// <summary>
+        /// Returns a workgroup summary belonging to a given user
+        /// 
+        /// The summary is based on the state of the workgroup at the end of 
+        /// the session
+        /// 
+        /// </summary>
+        /// <param name="userId">The user that created the workgroup</param>
+        /// <param name="workgroupId">The id of the workgroup to retrieve</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("users/{userId}/workgroups/{workgroupId}")]
+        [ResponseType(typeof(WorkgroupModel))]
         public IHttpActionResult GetWorkgroup(int userId, int workgroupId)
         {
             using (var db = new FleetContext())
             {
                 var workgroup = db.Workgroups
+                    .Include(w => w.AllowedApplications)
+                    .Include(w => w.Workstations.Select(wm => wm.Workstation))
+                    .Include(w => w.Room)
                     .Where(w => w.UserId == userId)
                     .SingleOrDefault(w => w.WorkgroupId == workgroupId);
 
@@ -27,53 +44,62 @@ namespace FleetApi.Controllers
                     return Unauthorized();
                 }
 
-                return Ok(new
+                return Ok(new WorkgroupModel
                 {
                    Started = workgroup.Started,
-                   Expired = workgroup.Expires,
+                   Ended = workgroup.Expires,
                    Duration = (workgroup.Expires - workgroup.Started).Minutes,
                    AllowedApplications = workgroup.AllowedApplications
-                        .Select(a => new
+                        .Select(a => new GenericItemModel
                         {
                             Id = a.ApplicationId,
                             Name = a.ApplicationName
                         }),
-                   Room = new {
-                       Id = workgroup.RoomId,
+                   Room = new GenericItemModel {
+                       Id = workgroup.RoomId.Value,
                        Name = workgroup.Room.RoomIdentifier
                    },
                    Workstations = workgroup.Workstations
                         .Where(wm => !wm.TimeRemoved.HasValue)      
-                           .Select(wm => new
+                           .Select(wm => new WorkstationModel
                            {
                                Id = wm.WorkstationId,
-                               FriendlyName = wm.Workstation.FriendlyName,
+                               Name = wm.Workstation.FriendlyName,
+                               Identifier = wm.Workstation.WorkstationIdentifier,
                                Colour = wm.Workstation.Colour,
-                               TopXOffset = wm.Workstation.TopXRoomOffset,
-                               TopYOffset = wm.Workstation.TopYRoomOffset,
+                               TopXRoomOffset = wm.Workstation.TopXRoomOffset,
+                               TopYRoomOffset = wm.Workstation.TopYRoomOffset,
                                LastSeen = wm.Workstation.LastSeen
                            })
                 });
             }
         }
 
+        /// <summary>
+        /// Returns a list of prior workgroups that a user conducted
+        /// </summary>
+        /// <param name="userId">The user that conducted the workgroups</param>
+        /// <param name="count">The amount of listings to retrive</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("users/{userId}/workgroups")]
+        [ResponseType(typeof(IEnumerable<WorkgroupListingModel>))]
         public IHttpActionResult GetPriorWorkgroups(int userId, int? count = 5)
         {
             using (var db = new FleetContext())
             {
                 var recentWorkgroups = db.Workgroups
+                    .Include(w => w.Room)
                     .Where(w => w.UserId == userId)
                     .Where(w => w.Expires < DateTime.Now)
                     .OrderByDescending(w => w.Started)
                     .Take(count.Value)
-                    .Select(wg => new
+                    .Select(wg => new WorkgroupListingModel
                     {
                         Id = wg.WorkgroupId,
-                        Room = new
+                        Room = new GenericItemModel()
                         {
-                            Id = wg.RoomId,
+                            Id = wg.RoomId.Value,
                             Name = wg.Room.RoomIdentifier
                         },
                         Started = wg.Started
@@ -82,7 +108,6 @@ namespace FleetApi.Controllers
 
                 return Ok(recentWorkgroups);
             }
-            return NotFound();
         }
 
     }

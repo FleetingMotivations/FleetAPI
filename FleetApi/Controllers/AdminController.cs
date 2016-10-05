@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 using FleetApi.Models;
 using FleetEntityFramework.DAL;
 using FleetEntityFramework.Models;
@@ -85,6 +86,7 @@ namespace FleetApi.Controllers
         /// <returns>workstationId || 500 if error</returns>
         [Route("rooms/{roomId}/workstations")]
         [HttpPost]
+        [ResponseType(typeof(EntityModel))]
         public IHttpActionResult AddWorkstation(int roomId, [FromBody] WorkstationBindingModel model)
         {
             using (var db = new FleetContext())
@@ -99,7 +101,10 @@ namespace FleetApi.Controllers
                 };
                 db.Workstations.Add(workstation);
                 db.SaveChanges();
-                return Ok(workstation.WorkstationId);
+                return Ok(new EntityModel
+                {
+                    Id = workstation.WorkstationId
+                });
             }
         }
 

@@ -526,5 +526,237 @@
             <param name="model">User details</param>
             <returns></returns>
         </member>
+        <member name="M:FleetApi.Controllers.HomeController.Login(System.String,System.String)">
+            <summary>
+            Login to the system with UoN credentials
+            </summary>
+            <param name="username">UoN username</param>
+            <param name="password">UoN password</param>
+            <returns></returns>
+        </member>
+        <member name="M:FleetApi.Controllers.HomeController.GetCampuses">
+            <summary>
+            Returns a list of campus'
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FleetApi.Controllers.HomeController.GetBuildings(System.Int32)">
+            <summary>
+            Returns all of the buildings on a given campus
+            </summary>
+            <param name="campusId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FleetApi.Controllers.HomeController.GetRooms(System.Int32)">
+            <summary>
+            Returns a collection of all the rooms in a given building
+            </summary>
+            <param name="buildingId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FleetApi.Controllers.HomeController.GetWorkstations(System.Int32)">
+            <summary>
+            Returns a collection of all of the workstations for a given room
+            </summary>
+            <param name="roomId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FleetApi.Controllers.UserController.GetWorkgroup(System.Int32,System.Int32)">
+            <summary>
+            Returns a workgroup summary belonging to a given user
+            
+            The summary is based on the state of the workgroup at the end of 
+            the session
+            
+            </summary>
+            <param name="userId">The user that created the workgroup</param>
+            <param name="workgroupId">The id of the workgroup to retrieve</param>
+            <returns></returns>
+        </member>
+        <member name="M:FleetApi.Controllers.UserController.GetPriorWorkgroups(System.Int32,System.Nullable{System.Int32})">
+            <summary>
+            Returns a list of prior workgroups that a user conducted
+            </summary>
+            <param name="userId">The user that conducted the workgroups</param>
+            <param name="count">The amount of listings to retrive</param>
+            <returns></returns>
+        </member>
+        <member name="M:FleetApi.Controllers.WorkgroupController.ToggleSharingAbility(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Enable of disable sharing capabilities for a particular workstation in a workgroup
+            </summary>
+            <param name="workgroupId">THe target workgroup</param>
+            <param name="workstationId">THe target workstation</param>
+            <param name="enable">Toggle value</param>
+            <returns></returns>
+        </member>
+        <member name="M:FleetApi.Controllers.WorkgroupController.ToggleSharingAbility(System.Int32,System.Boolean)">
+            <summary>
+            Enables or disables sharing for the whole workgroup
+            </summary>
+            <param name="workgroupId">THe target workgroup</param>
+            <param name="enable">Toggle value</param>
+            <returns></returns>
+        </member>
+        <member name="M:FleetApi.Controllers.WorkgroupController.AddWorkstation(System.Int32,System.Int32)">
+            <summary>
+            
+            Adds a workstation to the workgroup
+            Assumes the workgroup is in progress, and the workstation is available
+            
+            </summary>
+            <param name="workgroupId">THe target workgroup</param>
+            <param name="workstationId">THe target workstation</param>
+            <returns></returns>
+        </member>
+        <member name="M:FleetApi.Controllers.WorkgroupController.DeleteWorkstation(System.Int32,System.Int32)">
+            <summary>
+            Will remove a given workstation from the workgroup
+            
+            Assumes workgroup is still in progress, and that workstation is
+            currently in the workgroup
+             
+            </summary>
+            <param name="workgroupId">THe target workgroup</param>
+            <param name="workstationId">THe target workstation</param>
+            <returns></returns>
+        </member>
+        <member name="M:FleetApi.Controllers.WorkgroupController.GetWorkstations(System.Int32)">
+            <summary>
+            Returns all of the workstations that are currently a member of the workgroup
+            </summary>
+            <param name="workgroupId">The target workgroup</param>
+            <returns></returns>
+        </member>
+        <member name="M:FleetApi.Controllers.WorkgroupController.CreateWorkgroup(FleetApi.Models.WorkgroupBindingModel)">
+            <summary>
+            Creates a new workgroup
+            
+            Assumes all of the workstations are currently available, and that the user
+            making the workgroup, doesn't have any currently running or scheduled workgroups
+            
+            </summary>
+            <param name="workgroup"></param>
+            <returns></returns>
+        </member>
+        <member name="P:FleetApi.Models.EntityModel.Id">
+            <summary>
+            The database Id of the model
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.GenericItemModel.Name">
+            <summary>
+            The display name of the item
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.WorkstationModel.LastSeen">
+            <summary>
+            The last time the workstation announced itself
+            as being available (talking to the WebService)
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.WorkstationModel.Identifier">
+            <summary>
+            The IT issued identifier for the workstation
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.WorkstationModel.TopXRoomOffset">
+            <summary>
+            The percentage offset of the workstation relative to 
+            the top of an image
+            of a given room - x axis
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.WorkstationModel.TopYRoomOffset">
+            <summary>
+            The percentage offset of the workstation relative to 
+            the top of an image
+            of a given room - y axis
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.WorkstationModel.Available">
+            <summary>
+            Indicates if a workstation is already part of a workgroup
+            or otherwise unavailable for use (note that this does not
+            mean a workstation is offline)
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.WorkstationModel.Colour">
+            <summary>
+            The colour associated with this workstation within its room
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.WorkgroupMemberModel.SharingEnabled">
+            <summary>
+            Indicates if a given workstation can share content
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.WorkgroupModel.Started">
+            <summary>
+            The time at which the workgroup was scheduled to start
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.WorkgroupModel.Ended">
+            <summary>
+            The time at which the workgroup ended
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.WorkgroupModel.Duration">
+            <summary>
+            The amount of minutes the workgroup ran for
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.WorkgroupModel.AllowedApplications">
+            <summary>
+            The applications that were permitted to run during the 
+            workgroup
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.WorkgroupModel.Room">
+            <summary>
+            The primary room from which the collaboration session took place
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.WorkgroupModel.Workstations">
+            <summary>
+            The workstations that were involved in the collaboration
+            session when it ended
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.WorkgroupListingModel.Room">
+            <summary>
+            The primary room from which the workgroup took place
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.WorkgroupListingModel.Started">
+            <summary>
+            The time at which the workgroup started
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.UserLoginTokenModel.FirstName">
+            <summary>
+            User first name
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.UserLoginTokenModel.LastName">
+            <summary>
+            User last name
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.UserLoginTokenModel.Username">
+            <summary>
+            username: must be unqiue, generally maps to UoN || eduroam login
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.UserLoginTokenModel.Token">
+            <summary>
+            Api access token
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.UserLoginTokenModel.Expires">
+            <summary>
+            Time at which access token will expire
+            </summary>
+        </member>
     </members>
 </doc>
