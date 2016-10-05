@@ -1,0 +1,291 @@
+﻿<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from localhost:57233/Help/Api/GET-api-rooms-roomId-workstations by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 05 Oct 2016 23:49:33 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>GET api/rooms/{roomId}/workstations</title>
+    <link href="../../Content/bootstrap.css" rel="stylesheet"/>
+<link href="../../Content/site.css" rel="stylesheet"/>
+
+    <script src="../../Scripts/modernizr-2.6.2.js"></script>
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="../../index.html">Application name</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="../../index.html">Home</a></li>
+                    <li><a href="../../Help-2.html">API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        
+
+<link type="text/css" href="../../Areas/HelpPage/HelpPage.css" rel="stylesheet" />
+<div id="body" class="help-page">
+    <section class="featured">
+        <div class="content-wrapper">
+            <p>
+                <a href="../../Help-2.html">Help Page Home</a>
+            </p>
+        </div>
+    </section>
+    <section class="content-wrapper main-content clear-fix">
+        
+<h1>GET api/rooms/{roomId}/workstations</h1>
+<div>
+    <p>Returns a collection of all of the workstations for a given room</p>
+
+    <h2>Request Information</h2>
+
+    <h3>URI Parameters</h3>
+        <table class="help-page-table">
+        <thead>
+            <tr><th>Name</th><th>Description</th><th>Type</th><th>Additional information</th></tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td class="parameter-name">roomId</td>
+                    <td class="parameter-documentation">
+                        <p></p>
+                    </td>
+                    <td class="parameter-type">
+                        integer
+                    </td>
+                    <td class="parameter-annotations">
+                                <p>Required</p>
+                    </td>
+                </tr>
+        </tbody>
+    </table>
+
+
+
+    <h3>Body Parameters</h3>
+
+    <p></p>
+
+        <p>None.</p>
+
+
+    <h2>Response Information</h2>
+
+    <h3>Resource Description</h3>
+
+    <p></p>
+
+        Collection of <a href="../ResourceModelb54b.html?modelName=WorkstationModel">WorkstationModel</a>
+    <table class="help-page-table">
+        <thead>
+            <tr><th>Name</th><th>Description</th><th>Type</th><th>Additional information</th></tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td class="parameter-name">LastSeen</td>
+                    <td class="parameter-documentation">
+                        <p>The last time the workstation announced itself
+            as being available (talking to the WebService)</p>
+                    </td>
+                    <td class="parameter-type">
+                        date
+                    </td>
+                    <td class="parameter-annotations">
+                            <p>None.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="parameter-name">Identifier</td>
+                    <td class="parameter-documentation">
+                        <p>The IT issued identifier for the workstation</p>
+                    </td>
+                    <td class="parameter-type">
+                        string
+                    </td>
+                    <td class="parameter-annotations">
+                            <p>None.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="parameter-name">TopXRoomOffset</td>
+                    <td class="parameter-documentation">
+                        <p>The percentage offset of the workstation relative to 
+            the top of an image
+            of a given room - x axis</p>
+                    </td>
+                    <td class="parameter-type">
+                        decimal number
+                    </td>
+                    <td class="parameter-annotations">
+                            <p>None.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="parameter-name">TopYRoomOffset</td>
+                    <td class="parameter-documentation">
+                        <p>The percentage offset of the workstation relative to 
+            the top of an image
+            of a given room - y axis</p>
+                    </td>
+                    <td class="parameter-type">
+                        decimal number
+                    </td>
+                    <td class="parameter-annotations">
+                            <p>None.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="parameter-name">Available</td>
+                    <td class="parameter-documentation">
+                        <p>Indicates if a workstation is already part of a workgroup
+            or otherwise unavailable for use (note that this does not
+            mean a workstation is offline)</p>
+                    </td>
+                    <td class="parameter-type">
+                        boolean
+                    </td>
+                    <td class="parameter-annotations">
+                            <p>None.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="parameter-name">Colour</td>
+                    <td class="parameter-documentation">
+                        <p>The colour associated with this workstation within its room</p>
+                    </td>
+                    <td class="parameter-type">
+                        string
+                    </td>
+                    <td class="parameter-annotations">
+                            <p>None.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="parameter-name">Name</td>
+                    <td class="parameter-documentation">
+                        <p>The display name of the item</p>
+                    </td>
+                    <td class="parameter-type">
+                        string
+                    </td>
+                    <td class="parameter-annotations">
+                            <p>None.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="parameter-name">Id</td>
+                    <td class="parameter-documentation">
+                        <p>The database Id of the model</p>
+                    </td>
+                    <td class="parameter-type">
+                        integer
+                    </td>
+                    <td class="parameter-annotations">
+                            <p>None.</p>
+                    </td>
+                </tr>
+        </tbody>
+    </table>
+
+
+        <h3>Response Formats</h3>
+
+<div>
+        <h4 class="sample-header">application/json, text/json</h4>
+        <div class="sample-content">
+            <span><b>Sample:</b></span>
+<pre class="wrapped">
+[
+  {
+    &quot;lastSeen&quot;: &quot;2016-10-06T10:30:30.8524639+11:00&quot;,
+    &quot;identifier&quot;: &quot;sample string 1&quot;,
+    &quot;topXRoomOffset&quot;: 2.1,
+    &quot;topYRoomOffset&quot;: 3.1,
+    &quot;available&quot;: true,
+    &quot;colour&quot;: &quot;sample string 5&quot;,
+    &quot;name&quot;: &quot;sample string 6&quot;,
+    &quot;id&quot;: 7
+  },
+  {
+    &quot;lastSeen&quot;: &quot;2016-10-06T10:30:30.8524639+11:00&quot;,
+    &quot;identifier&quot;: &quot;sample string 1&quot;,
+    &quot;topXRoomOffset&quot;: 2.1,
+    &quot;topYRoomOffset&quot;: 3.1,
+    &quot;available&quot;: true,
+    &quot;colour&quot;: &quot;sample string 5&quot;,
+    &quot;name&quot;: &quot;sample string 6&quot;,
+    &quot;id&quot;: 7
+  }
+]
+</pre>
+        </div>
+        <h4 class="sample-header">application/xml, text/xml</h4>
+        <div class="sample-content">
+            <span><b>Sample:</b></span>
+<pre class="wrapped">
+&lt;ArrayOfWorkstationModel xmlns:i=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns=&quot;http://schemas.datacontract.org/2004/07/FleetApi.Models&quot;&gt;
+  &lt;WorkstationModel&gt;
+    &lt;Id&gt;7&lt;/Id&gt;
+    &lt;Name&gt;sample string 6&lt;/Name&gt;
+    &lt;Available&gt;true&lt;/Available&gt;
+    &lt;Colour&gt;sample string 5&lt;/Colour&gt;
+    &lt;Identifier&gt;sample string 1&lt;/Identifier&gt;
+    &lt;LastSeen&gt;2016-10-06T10:30:30.8524639+11:00&lt;/LastSeen&gt;
+    &lt;TopXRoomOffset&gt;2.1&lt;/TopXRoomOffset&gt;
+    &lt;TopYRoomOffset&gt;3.1&lt;/TopYRoomOffset&gt;
+  &lt;/WorkstationModel&gt;
+  &lt;WorkstationModel&gt;
+    &lt;Id&gt;7&lt;/Id&gt;
+    &lt;Name&gt;sample string 6&lt;/Name&gt;
+    &lt;Available&gt;true&lt;/Available&gt;
+    &lt;Colour&gt;sample string 5&lt;/Colour&gt;
+    &lt;Identifier&gt;sample string 1&lt;/Identifier&gt;
+    &lt;LastSeen&gt;2016-10-06T10:30:30.8524639+11:00&lt;/LastSeen&gt;
+    &lt;TopXRoomOffset&gt;2.1&lt;/TopXRoomOffset&gt;
+    &lt;TopYRoomOffset&gt;3.1&lt;/TopYRoomOffset&gt;
+  &lt;/WorkstationModel&gt;
+&lt;/ArrayOfWorkstationModel&gt;
+</pre>
+        </div>
+</div>
+</div>
+    </section>
+</div>
+
+        <hr />
+        <footer>
+            <p>&copy; 2016 - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    <script src="../../Scripts/jquery-1.10.2.js"></script>
+
+    <script src="../../Scripts/bootstrap.js"></script>
+<script src="../../Scripts/respond.js"></script>
+
+    
+
+<!-- Visual Studio Browser Link -->
+<script type="application/json" id="__browserLink_initializationData">
+    {"appName":"Mozilla","requestId":"30fb181ec4764a25a28084694fa40986"}
+</script>
+<script type="text/javascript" src="http://localhost:59959/38458d35d1de4a8da2f50dd4c170f4fe/browserLink" async="async"></script>
+<!-- End Browser Link -->
+
+</body>
+
+<!-- Mirrored from localhost:57233/Help/Api/GET-api-rooms-roomId-workstations by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 05 Oct 2016 23:49:33 GMT -->
+</html>
