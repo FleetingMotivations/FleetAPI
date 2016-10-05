@@ -70,7 +70,7 @@ namespace FleetApi.Controllers
                 var workstation = new Workstation
                 {
                     WorkstationIdentifier = model.WorkstationIdentifier,
-                    RoomID = model.RoomId,
+                    RoomId = model.RoomId,
                     FriendlyName = model.FriendlyName,
                     LastSeen = DateTime.Today
 
