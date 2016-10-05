@@ -16,7 +16,7 @@ using Microsoft.Owin.Security.OAuth;
 using FleetApi.Models;
 using FleetApi.Providers;
 using FleetApi.Results;
-
+/*
 namespace FleetApi.Controllers
 {
     [Authorize]
@@ -492,3 +492,4 @@ namespace FleetApi.Controllers
         #endregion
     }
 }
+*/

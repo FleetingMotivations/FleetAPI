@@ -15,6 +15,7 @@ using Route = System.Web.Http.RouteAttribute;
 using RoutePrefix = System.Web.Http.RoutePrefixAttribute;
 
 using HttpPost = System.Web.Http.HttpPostAttribute;
+using HttpGet = System.Web.Http.HttpGetAttribute;
 
 namespace FleetApi.Controllers
 {
@@ -23,11 +24,11 @@ namespace FleetApi.Controllers
     {
         public IHttpActionResult Index()
         {
-            return Ok("hello");
+            return RedirectToRoute("/help", null);
         }
 
-        [Route("login")]
         [HttpPost]
+        [Route("login")]
         public IHttpActionResult Login(string username, string password)
         {
             using (var db = new FleetContext())
@@ -47,7 +48,8 @@ namespace FleetApi.Controllers
             }
         }
 
-        [Route("campuses")]
+        [HttpGet]
+        [Route("campuses")] // Stupid plurals
         public IHttpActionResult GetCampuses()
         {
             using (var db = new FleetContext())
@@ -64,7 +66,8 @@ namespace FleetApi.Controllers
             }
         }
 
-        [Route("buildings/{campusId}")]
+        [HttpGet]
+        [Route("campuses/{campusId}/buildings")]
         public IHttpActionResult GetBuildings(int campusId)
         {
             using (var db = new FleetContext())
@@ -82,7 +85,8 @@ namespace FleetApi.Controllers
             }
         }
 
-        [Route("rooms/{buildingId}")]
+        [HttpGet]
+        [Route("buildings/{buildingId}/rooms")]
         public IHttpActionResult GetRooms(int buildingId)
         {
             using (var db = new FleetContext())
@@ -100,12 +104,14 @@ namespace FleetApi.Controllers
             }
         }
 
-        [Route("workstations/{roomId}")]
+        [HttpGet]
+        [Route("rooms/{roomId}/workstations")]
         public IHttpActionResult GetWorkstations(int roomId)
         {
             using (var db = new FleetContext())
             {
-
+                // Don't need a lock here because we are only reading
+                // It will fail later if there are race conditions
                 var availableWorkstationModels = db.Workstations
                     .Where(w => w.RoomId == roomId)
                     .Where(w => (!w.Workgroups.Any()) || w.Workgroups
@@ -148,7 +154,5 @@ namespace FleetApi.Controllers
                 return Ok(q);
             }
         }
-
-
     }
 }

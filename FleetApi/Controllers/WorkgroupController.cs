@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -17,7 +18,7 @@ namespace FleetApi.Controllers
         private readonly static object _lock = new object();
 
         [HttpPut]
-        [Route("workgroup/{workgroupId}/workstation/{workstationId}/sharing")]
+        [Route("workgroups/{workgroupId}/workstations/{workstationId}/sharing")]
         public IHttpActionResult ToggleSharingAbility(int workgroupId, int workstationId, [FromBody]bool enable)
         {
             using (var db = new FleetContext())
@@ -43,16 +44,138 @@ namespace FleetApi.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("workgroup/workstations")]
-        public IHttpActionResult GetWorkstations(int workgroupId)
+        [HttpPut]
+        [Route("workgroups/{workgroupId}/sharing")]
+        public IHttpActionResult ToggleSharingAbility(int workgroupId, [FromBody]bool enable)
         {
-            return Ok();
+            using (var db = new FleetContext())
+            {
+                // Ensure that the workstation is in the workgroup, and hasn't been removed
+                var workstationGroupMemberships = db.WorkgroupMembers
+                    .Where(w => w.WorkgroupId == workgroupId)
+                    .Where(Workgroup.IsInProgress())
+                    .Where(w => !w.TimeRemoved.HasValue);
+
+                workstationGroupMemberships.ForEach(w => w.SharingEnabled = enable);
+                db.SaveChanges();
+
+                return Ok();
+            }
         }
 
-
         [HttpPost]
-        [Route("workgroup")]
+        [Route("workgroups/{workgroupId}/workstations/{workstationId}")]
+        public IHttpActionResult AddWorkstation(int workgroupId, int workstationId)
+        {
+            using (var db = new FleetContext())
+            {
+                 var workgroupInProgress = db.Workgroups
+                    .Where(w => w.WorkgroupId == workgroupId)
+                    .SingleOrDefault(Workgroup.InProgress()) != null;
+
+                if (!workgroupInProgress)
+                {
+                    return Unprocessable(new
+                    {
+                        error = "Workgroup not in progress"
+                    });
+                }
+
+                // Need that lock again to ensure that we aren't double adding workstations
+                // due to racey conditions D:
+                lock (_lock)
+                {
+                    var unavailable = db.Workstations
+                    .Include(w => w.Workgroups.Select(wm => wm.Workgroup))
+                    .Single(w => w.WorkstationId == workstationId)
+                    .Workgroups
+                    .Where(wm => !wm.TimeRemoved.HasValue)
+                    .AsQueryable()
+                    .Any(Workgroup.IsInProgress());
+
+                    if (unavailable)
+                    {
+                        return Unprocessable(new
+                        {
+                            error = "Workstation is unavailable"
+                        });
+                    }
+
+                    // At this point, we know the workstation is available, and the workgroup is in progress
+                    db.WorkgroupMembers.Add(new WorkgroupWorkstation
+                    {
+                        WorkgroupId = workgroupId,
+                        WorkstationId = workstationId,
+                        TimeAdded = DateTime.Now,
+                        TimeRemoved = null,
+                        SharingEnabled = true
+                    });
+
+                    db.SaveChanges();
+                }
+            }
+            return NotFound();
+        }
+
+        [HttpDelete]
+        [Route("workgroups/{workgroupId}/workstations/{workstationId}")]
+        public IHttpActionResult DeleteWorkstation(int workgroupId, int workstationId)
+        {
+            using (var db = new FleetContext())
+            {
+                var workgroupMember = db.WorkgroupMembers
+                    .Where(w => w.WorkgroupId == workgroupId)
+                    .Where(w => w.WorkstationId == workstationId)
+                    .Where(Workgroup.IsInProgress())
+                    .SingleOrDefault(w => !w.TimeRemoved.HasValue);
+
+                if (workgroupMember == null)
+                {
+                    return Unprocessable(new
+                    {
+                        error = "Workstation not part of workgroup. Workgroup may have ended"
+                    });
+                }
+
+                // Otherwise, we can safely remove them. This doesn't need a lock
+                // as it's not going to lead to double allocation of a workstation
+                // to a workgroup
+                workgroupMember.TimeRemoved = DateTime.Now;
+
+                db.SaveChanges();
+                return Ok();
+            }
+        }
+
+        [HttpGet]
+        [Route("workgroups/{workgroupId}/workstations")]
+        public IHttpActionResult GetWorkstations(int workgroupId)
+        {
+            using (var db = new FleetContext())
+            {
+                var workstations = db.Workgroups
+                    .Include(w => w.Workstations.Select(wm => wm.Workgroup))
+                    .Single(w => w.WorkgroupId == workgroupId)
+                    .Workstations
+                    .Where(wm => !wm.TimeRemoved.HasValue)
+                    .Select(w => new
+                    {
+                        Id = w.WorkstationId,
+                        SharingEnabled = w.SharingEnabled,
+                        LastSeen = w.Workstation.LastSeen,
+                        FriendlyName = w.Workstation.FriendlyName,
+                        Colour = w.Workstation.Colour,
+                        TopXOffset = w.Workstation.TopXRoomOffset,
+                        TopYOffset = w.Workstation.TopYRoomOffset
+                    })
+                    .ToList();
+                return Ok(workstations);
+            }
+        }
+
+            
+        [HttpPost]
+        [Route("workgroups")]
         public IHttpActionResult CreateWorkgroup(WorkgroupBindingModel workgroup)
         {
             using (var db = new FleetContext())
@@ -96,7 +219,7 @@ namespace FleetApi.Controllers
                         .Where(Workgroup.IsInProgress())
                         .Select(ww => new
                         {
-                            Id = ww.WorkstationId
+                            id = ww.WorkstationId
                         })
                         .ToList();
 
@@ -104,6 +227,7 @@ namespace FleetApi.Controllers
                     {
                         return Unprocessable(new
                         {
+                            error = "Workstations Unavailable",
                             unavailableWorkstations = badWorkstations
                         });
                     }
@@ -135,7 +259,8 @@ namespace FleetApi.Controllers
                             WorkstationId = id,
                             WorkgroupId = workgroupModel.WorkgroupId,
                             TimeRemoved = null,
-                            SharingEnabled = workgroup.SharingEnabled
+                            SharingEnabled = workgroup.SharingEnabled,
+                            TimeAdded = DateTime.Now
                         });
                         
                     mappings.ForEach(ww => db.WorkgroupMembers.Add(ww));
