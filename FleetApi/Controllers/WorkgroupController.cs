@@ -209,7 +209,8 @@ namespace FleetApi.Controllers
                         Name = w.Workstation.FriendlyName,
                         Colour = w.Workstation.Colour,
                         TopXRoomOffset = w.Workstation.TopXRoomOffset,
-                        TopYRoomOffset = w.Workstation.TopYRoomOffset
+                        TopYRoomOffset = w.Workstation.TopYRoomOffset,
+                        Identifier = w.Workstation.WorkstationIdentifier
                     })
                     .ToList();
                 return Ok(workstations);
@@ -313,7 +314,7 @@ namespace FleetApi.Controllers
                             WorkgroupId = workgroupModel.WorkgroupId,
                             TimeRemoved = null,
                             SharingEnabled = workgroup.SharingEnabled,
-                            TimeAdded = DateTime.Now
+                            TimeAdded = DateTime.Now,
                         });
                         
                     mappings.ForEach(ww => db.WorkgroupMembers.Add(ww));
