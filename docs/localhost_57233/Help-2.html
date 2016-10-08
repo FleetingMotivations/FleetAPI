@@ -1,0 +1,249 @@
+﻿<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from localhost:57233/Help by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 05 Oct 2016 23:49:31 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>ASP.NET Web API Help Page</title>
+    <link href="Content/bootstrap.css" rel="stylesheet"/>
+<link href="Content/site.css" rel="stylesheet"/>
+
+    <script src="Scripts/modernizr-2.6.2.js"></script>
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Application name</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="Help-2.html">API</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        
+
+<link type="text/css" href="Areas/HelpPage/HelpPage.css" rel="stylesheet" />
+<header class="help-page">
+    <div class="content-wrapper">
+        <div class="float-left">
+            <h1>ASP.NET Web API Help Page</h1>
+        </div>
+    </div>
+</header>
+<div id="body" class="help-page">
+    <section class="featured">
+        <div class="content-wrapper">
+            <h2>Introduction</h2>
+            <p>
+                Provide a general description of your APIs here.
+            </p>
+        </div>
+    </section>
+    <section class="content-wrapper main-content clear-fix">
+
+
+<h2 id="User">User</h2>
+<table class="help-page-table">
+    <thead>
+        <tr><th>API</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="api-name"><a href="Help/Api/GET-api-users-userId-workgroups-workgroupId.html">GET api/users/{userId}/workgroups/{workgroupId}</a></td>
+            <td class="api-documentation">
+                <p>Returns a workgroup summary belonging to a given user
+            
+            The summary is based on the state of the workgroup at the end of 
+            the session</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="api-name"><a href="Help/Api/GET-api-users-userId-workgroups_count.html">GET api/users/{userId}/workgroups?count={count}</a></td>
+            <td class="api-documentation">
+                <p>Returns a list of prior workgroups that a user conducted</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 id="Home">Home</h2>
+<table class="help-page-table">
+    <thead>
+        <tr><th>API</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="api-name"><a href="Help/Api/POST-api-login_username_password.html">POST api/login?username={username}&amp;password={password}</a></td>
+            <td class="api-documentation">
+                <p>Login to the system with UoN credentials</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="api-name"><a href="Help/Api/GET-api-campuses.html">GET api/campuses</a></td>
+            <td class="api-documentation">
+                <p>Returns a list of campus&#39;</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="api-name"><a href="Help/Api/GET-api-campuses-campusId-buildings.html">GET api/campuses/{campusId}/buildings</a></td>
+            <td class="api-documentation">
+                <p>Returns all of the buildings on a given campus</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="api-name"><a href="Help/Api/GET-api-buildings-buildingId-rooms.html">GET api/buildings/{buildingId}/rooms</a></td>
+            <td class="api-documentation">
+                <p>Returns a collection of all the rooms in a given building</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="api-name"><a href="Help/Api/GET-api-rooms-roomId-workstations.html">GET api/rooms/{roomId}/workstations</a></td>
+            <td class="api-documentation">
+                <p>Returns a collection of all of the workstations for a given room</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="api-name"><a href="Help/Api/POST-api-Home.html">POST api/Home</a></td>
+            <td class="api-documentation">
+                <p>No documentation available.</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 id="Workgroup">Workgroup</h2>
+<table class="help-page-table">
+    <thead>
+        <tr><th>API</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="api-name"><a href="Help/Api/PUT-api-workgroups-workgroupId-workstations-workstationId-sharing.html">PUT api/workgroups/{workgroupId}/workstations/{workstationId}/sharing</a></td>
+            <td class="api-documentation">
+                <p>Enable of disable sharing capabilities for a particular workstation in a workgroup</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="api-name"><a href="Help/Api/PUT-api-workgroups-workgroupId-sharing.html">PUT api/workgroups/{workgroupId}/sharing</a></td>
+            <td class="api-documentation">
+                <p>Enables or disables sharing for the whole workgroup</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="api-name"><a href="Help/Api/POST-api-workgroups-workgroupId-workstations-workstationId.html">POST api/workgroups/{workgroupId}/workstations/{workstationId}</a></td>
+            <td class="api-documentation">
+                <p>Adds a workstation to the workgroup
+            Assumes the workgroup is in progress, and the workstation is available</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="api-name"><a href="Help/Api/DELETE-api-workgroups-workgroupId-workstations-workstationId.html">DELETE api/workgroups/{workgroupId}/workstations/{workstationId}</a></td>
+            <td class="api-documentation">
+                <p>Will remove a given workstation from the workgroup
+            
+            Assumes workgroup is still in progress, and that workstation is
+            currently in the workgroup</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="api-name"><a href="Help/Api/GET-api-workgroups-workgroupId-workstations.html">GET api/workgroups/{workgroupId}/workstations</a></td>
+            <td class="api-documentation">
+                <p>Returns all of the workstations that are currently a member of the workgroup</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="api-name"><a href="Help/Api/POST-api-workgroups.html">POST api/workgroups</a></td>
+            <td class="api-documentation">
+                <p>Creates a new workgroup
+            
+            Assumes all of the workstations are currently available, and that the user
+            making the workgroup, doesn&#39;t have any currently running or scheduled workgroups</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 id="Admin">Admin</h2>
+<table class="help-page-table">
+    <thead>
+        <tr><th>API</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="api-name"><a href="Help/Api/POST-api-admin-campuses_campusName.html">POST api/admin/campuses?campusName={campusName}</a></td>
+            <td class="api-documentation">
+                <p>Adds a new campus</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="api-name"><a href="Help/Api/POST-api-admin-campuses-campusId-buildings.html">POST api/admin/campuses/{campusId}/buildings</a></td>
+            <td class="api-documentation">
+                <p>Adds a new building to the given campus</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="api-name"><a href="Help/Api/POST-api-admin-buildings-buildingId-rooms.html">POST api/admin/buildings/{buildingId}/rooms</a></td>
+            <td class="api-documentation">
+                <p>Adds a room to the given building</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="api-name"><a href="Help/Api/POST-api-admin-rooms-roomId-workstations.html">POST api/admin/rooms/{roomId}/workstations</a></td>
+            <td class="api-documentation">
+                <p>Adds a workstation to the given room</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="api-name"><a href="Help/Api/GET-api-admin-userRoles.html">GET api/admin/userRoles</a></td>
+            <td class="api-documentation">
+                <p>Returns the possible roles a user can have within the application</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="api-name"><a href="Help/Api/POST-api-admin-users.html">POST api/admin/users</a></td>
+            <td class="api-documentation">
+                <p>Adds a mock user to the system. This would be replaced with soft identity 
+            derived from a UoN single sign on in production</p>
+            </td>
+        </tr>
+    </tbody>
+</table>    </section>
+</div>
+
+        <hr />
+        <footer>
+            <p>&copy; 2016 - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    <script src="Scripts/jquery-1.10.2.js"></script>
+
+    <script src="Scripts/bootstrap.js"></script>
+<script src="Scripts/respond.js"></script>
+
+    
+
+<!-- Visual Studio Browser Link -->
+<script type="application/json" id="__browserLink_initializationData">
+    {"appName":"Mozilla","requestId":"3dd41a04a46e4b39a4f0f89936fc71c4"}
+</script>
+<script type="text/javascript" src="http://localhost:59959/38458d35d1de4a8da2f50dd4c170f4fe/browserLink" async="async"></script>
+<!-- End Browser Link -->
+
+</body>
+
+<!-- Mirrored from localhost:57233/Help by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 05 Oct 2016 23:49:31 GMT -->
+</html>
