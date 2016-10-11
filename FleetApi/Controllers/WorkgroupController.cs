@@ -18,6 +18,20 @@ namespace FleetApi.Controllers
     {
         private readonly static object _lock = new object();
 
+        [HttpDelete]
+        [Route("workgroups/{id}")]
+        public IHttpActionResult EndWorkgroup(int id)
+        {
+            using (var db = new FleetContext())
+            {
+                var workgroup = db.Workgroups.Single(w => w.WorkgroupId == id);
+                workgroup.Expires = DateTime.Now;
+                db.SaveChanges();
+
+                return Ok();
+            }
+        }
+
         /// <summary>
         /// Enable of disable sharing capabilities for a particular workstation in a workgroup
         /// </summary>
