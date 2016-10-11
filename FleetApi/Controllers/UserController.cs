@@ -59,7 +59,7 @@ namespace FleetApi.Controllers
                        Id = workgroup.RoomId.Value,
                        Name = workgroup.Room.RoomIdentifier,
                        CampusId = workgroup.Room.Building.CampusId,
-                       BuildingId = workgroup.Room.BuildingI
+                       BuildingId = workgroup.Room.BuildingId
                    },
                    Workstations = workgroup.Workstations
                         .Where(wm => !wm.TimeRemoved.HasValue)      
