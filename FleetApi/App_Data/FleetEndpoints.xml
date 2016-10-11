@@ -733,6 +733,16 @@
             The time at which the workgroup started
             </summary>
         </member>
+        <member name="P:FleetApi.Models.RoomDetailModel.CampusId">
+            <summary>
+            The campus id for the room
+            </summary>
+        </member>
+        <member name="P:FleetApi.Models.RoomDetailModel.BuildingId">
+            <summary>
+            The building in which the room is
+            </summary>
+        </member>
         <member name="P:FleetApi.Models.UserLoginTokenModel.FirstName">
             <summary>
             User first name

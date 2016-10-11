@@ -95,7 +95,7 @@ namespace FleetApi.Models
         /// <summary>
         /// The primary room from which the collaboration session took place
         /// </summary>
-        public GenericItemModel Room { get; set; }
+        public RoomDetailModel Room { get; set; }
 
         /// <summary>
         /// The workstations that were involved in the collaboration
@@ -115,5 +115,18 @@ namespace FleetApi.Models
         /// The time at which the workgroup started
         /// </summary>
         public DateTime Started { get; set; }
+    }
+
+    public class RoomDetailModel : GenericItemModel
+    {
+        /// <summary>
+        /// The campus id for the room
+        /// </summary>
+        public int CampusId { get; set; }
+
+        /// <summary>
+        /// The building in which the room is
+        /// </summary>
+        public int BuildingId { get; set; }
     }
 }

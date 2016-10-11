@@ -55,9 +55,11 @@ namespace FleetApi.Controllers
                             Id = a.ApplicationId,
                             Name = a.ApplicationName
                         }),
-                   Room = new GenericItemModel {
+                   Room = new RoomDetailModel {
                        Id = workgroup.RoomId.Value,
-                       Name = workgroup.Room.RoomIdentifier
+                       Name = workgroup.Room.RoomIdentifier,
+                       CampusId = workgroup.Room.Building.CampusId,
+                       BuildingId = workgroup.Room.BuildingI
                    },
                    Workstations = workgroup.Workstations
                         .Where(wm => !wm.TimeRemoved.HasValue)      
