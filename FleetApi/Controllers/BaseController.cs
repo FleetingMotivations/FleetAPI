@@ -1,4 +1,15 @@
-﻿using System;
+﻿/* 
+ * Description: Provides a base controller from which all FleetAPI
+ * controllers extend. IMplements common functionality and resource accesss
+ *
+ * Project: FleetApi
+ * Group Members: Jordan Collins, Tristan Newmann, Hayden Cheers, Alistair Woodcock
+ * Last modified: 11/10/16
+ * Last Author: Tristan Newmann
+ * 
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;

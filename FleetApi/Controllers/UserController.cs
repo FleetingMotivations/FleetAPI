@@ -1,4 +1,15 @@
-﻿using System;
+﻿/* 
+ * Description: Provides functionalities related to a single user, and 
+ * their dependant entities
+ *
+ * Project: FleetApi
+ * Group Members: Jordan Collins, Tristan Newmann, Hayden Cheers, Alistair Woodcock
+ * Last modified: 11/10/16
+ * Last Author: Tristan Newmann
+ * 
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;

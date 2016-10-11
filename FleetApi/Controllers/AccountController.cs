@@ -1,4 +1,14 @@
-﻿using System;
+﻿/* 
+ * Description: Provides account management when using the integrated
+ * EF account stuff. Not currently in use
+ * Project: FleetApi
+ * Group Members: Jordan Collins, Tristan Newmann, Hayden Cheers, Alistair Woodcock
+ * Last modified: 11/10/16
+ * Last Author: Tristan Newmann
+ * 
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Claims;
